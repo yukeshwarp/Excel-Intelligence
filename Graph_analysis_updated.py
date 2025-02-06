@@ -1,9 +1,3 @@
-
-import streamlit as st
-import pandas as pd
-from openai import AzureOpenAI
-import os
-import openpyxl
 import streamlit as st
 import pandas as pd
 from openai import AzureOpenAI
@@ -12,7 +6,7 @@ import openpyxl
 import base64
 from io import BytesIO
 
-# Streamlit UI
+
 st.title("Excel Intelligence")
 client = AzureOpenAI(
     azure_endpoint=os.getenv("ENDPOINT"),
@@ -38,7 +32,6 @@ def encode_file_to_base64(file):
     return base64.b64encode(file.getvalue()).decode("utf-8")
 
 
-# Sidebar for file upload and data viewer
 with st.sidebar:
     uploaded_file = st.file_uploader("Upload Financials CSV", type=["xlsx"])
     if uploaded_file is not None:
@@ -52,14 +45,10 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 if uploaded_file is not None:
-    # Convert dataframe to a formatted string
     string_data = df.to_string()
-
-    # Compute key numerical insights
     numerical_summary = df.describe().to_string()
 
     if "initial_analysis" not in st.session_state:
-        # Generate initial analysis from LLM
         analysis_prompt = f"""INSTRUCTION:
         Perform a comprehensive analysis of the provided financial dataset. Summarize key insights, trends, and any potential anomalies.
         Ensure the response is clear and easy to understand.
@@ -146,7 +135,6 @@ if uploaded_file is not None:
                 {"role": "assistant", "content": st.session_state.initial_analysis}
             )
 
-    # Chatbot interface
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
