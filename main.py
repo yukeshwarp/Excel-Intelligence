@@ -12,9 +12,9 @@ client = AzureOpenAI(
 )
 # Sidebar for file upload and data viewer
 with st.sidebar:
-    uploaded_file = st.file_uploader("Upload Financials CSV", type=["csv"])
+    uploaded_file = st.file_uploader("Upload Financials CSV", type=["xlsx"])
     if uploaded_file is not None:
-        df = pd.read_csv(uploaded_file)
+        df = pd.read_excel(uploaded_file)
 
         if st.button("View Cleaned Data Table"):
             st.write("### Cleaned Data Table")
